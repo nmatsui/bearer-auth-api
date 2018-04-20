@@ -8,8 +8,9 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/nmatsui/bearer-auth-api/token"
 )
 
 var METHODS = [...]string{"GET", "POST", "PUT", "PATHC", "DELETE", "HEAD"}
@@ -33,7 +34,7 @@ func setUp(t *testing.T) (func(string, string, string) (*http.Response, error), 
 		return c.Do(r)
 	}
 	tearDown := func() {
-		os.Unsetenv("AUTH_TOKENS")
+		os.Unsetenv(token.AUTH_TOKENS)
 		ts.Close()
 	}
 	return doRequest, tearDown
@@ -51,7 +52,7 @@ func TestNewHandlerWithValidTokens(t *testing.T) {
 		"TOKEN3": []
 	}
 	`
-	os.Setenv("AUTH_TOKENS", json)
+	os.Setenv(token.AUTH_TOKENS, json)
 
 	t.Run("without Header", func(t *testing.T) {
 		cases := []struct {

@@ -8,8 +8,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func setUp(t *testing.T) func() {
+	t.Helper()
+	return func() {
+		os.Unsetenv(AUTH_TOKENS)
+	}
+}
+
 func TestNewHolderNoENV(t *testing.T) {
 	assert := assert.New(t)
+	tearDown := setUp(t)
+	defer tearDown()
 
 	holder := NewHolder()
 
@@ -35,8 +44,10 @@ func TestNewHolderNoENV(t *testing.T) {
 
 func TestNewHolderEmptyENV(t *testing.T) {
 	assert := assert.New(t)
+	tearDown := setUp(t)
+	defer tearDown()
 
-	os.Setenv("AUTH_TOKENS", "")
+	os.Setenv(AUTH_TOKENS, "")
 
 	holder := NewHolder()
 
@@ -62,6 +73,8 @@ func TestNewHolderEmptyENV(t *testing.T) {
 
 func TestNewHolderWithValidENV(t *testing.T) {
 	assert := assert.New(t)
+	tearDown := setUp(t)
+	defer tearDown()
 
 	json := `
 	{
@@ -70,7 +83,7 @@ func TestNewHolderWithValidENV(t *testing.T) {
 		"TOKEN3": []
 	}
 	`
-	os.Setenv("AUTH_TOKENS", json)
+	os.Setenv(AUTH_TOKENS, json)
 
 	holder := NewHolder()
 
@@ -121,6 +134,8 @@ func TestNewHolderWithValidENV(t *testing.T) {
 
 func TestNewHolderWithInValidPath(t *testing.T) {
 	assert := assert.New(t)
+	tearDown := setUp(t)
+	defer tearDown()
 
 	json := `
 	{
@@ -128,7 +143,7 @@ func TestNewHolderWithInValidPath(t *testing.T) {
 		"TOKEN2": "dummy"
 	}
 	`
-	os.Setenv("AUTH_TOKENS", json)
+	os.Setenv(AUTH_TOKENS, json)
 
 	holder := NewHolder()
 
@@ -176,6 +191,8 @@ func TestNewHolderWithInValidPath(t *testing.T) {
 
 func TestNewHolderWithListJson(t *testing.T) {
 	assert := assert.New(t)
+	tearDown := setUp(t)
+	defer tearDown()
 
 	json := `
 	[
@@ -185,7 +202,7 @@ func TestNewHolderWithListJson(t *testing.T) {
 		}
 	]
 	`
-	os.Setenv("AUTH_TOKENS", json)
+	os.Setenv(AUTH_TOKENS, json)
 
 	holder := NewHolder()
 
@@ -224,6 +241,8 @@ func TestNewHolderWithListJson(t *testing.T) {
 
 func TestNewHolderWithInvalidJson(t *testing.T) {
 	assert := assert.New(t)
+	tearDown := setUp(t)
+	defer tearDown()
 
 	json := `
 	{
@@ -231,7 +250,7 @@ func TestNewHolderWithInvalidJson(t *testing.T) {
 		"TOKEN2": "dummy",
 	}
 	`
-	os.Setenv("AUTH_TOKENS", json)
+	os.Setenv(AUTH_TOKENS, json)
 
 	holder := NewHolder()
 
