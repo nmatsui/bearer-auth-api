@@ -2,6 +2,7 @@ package token
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 	"reflect"
 	"regexp"
@@ -11,6 +12,7 @@ const AUTH_TOKENS = "AUTH_TOKENS"
 
 type Holder struct {
 	tokens map[string][]*regexp.Regexp
+	keys   []string
 }
 
 func NewHolder() *Holder {
@@ -20,6 +22,7 @@ func NewHolder() *Holder {
 	}
 
 	tokens := map[string][]*regexp.Regexp{}
+	keys := []string{}
 
 	var obj interface{}
 	if err := json.Unmarshal([]byte(rawTokens), &obj); err == nil {
@@ -42,11 +45,21 @@ func NewHolder() *Holder {
 				}
 			}
 		}
+		for k, _ := range tokens {
+			keys = append(keys, k)
+		}
+	} else {
+		log.Printf("AUTH_TOKENS parse failed: %v\n", err)
 	}
 
 	return &Holder{
 		tokens: tokens,
+		keys:   keys,
 	}
+}
+
+func (holder *Holder) GetTokens() []string {
+	return holder.keys
 }
 
 func (holder *Holder) HasToken(token string) bool {
