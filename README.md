@@ -5,7 +5,7 @@ REST API server using gin-gonic to check "Authorization: Bearer" header.
 [![DockerHub Status](https://dockerbuildbadges.quelltext.eu/status.svg?organization=nmatsui&repository=bearer-auth-api)](https://hub.docker.com/r/nmatsui/bearer-auth-api/builds/)
 
 ## Description
-This REST API Server receives any path and any methods, and checks Bearer Token("Authorization: Bearer <TOKEN>" Request Header).
+This REST API Server receives any path and any methods, and checks Bearer Token ("Authorization: Bearer *TOKEN*" Request Header).
 
 1. If no Bearer Token, respond `401 Unauhtorized` always.
 1. If Token does not be found in `AUTH_TOKENS` JSON which is given from the environment variable, respond `401 Unauthorized`.
@@ -16,7 +16,7 @@ This REST API is assumed to use with [Ambassador](https://www.getambassador.io/)
 
 ## `AUTH_TOKENS` JSON template
 
-```json
+```text
 {
   "<token1>": ["<allowed path regex>", "<allowed path regex>"...],
   "<token2>": [...],
