@@ -8,15 +8,24 @@ import (
 	"regexp"
 )
 
-const AUTH_TOKENS = "AUTH_TOKENS"
+/*
+AuthTokens : AUTH_TOKEN is an environment vairable name to set token configurations.
+*/
+const AuthTokens = "AUTH_TOKENS"
 
+/*
+Holder : a struct to hold token configurations.
+*/
 type Holder struct {
 	tokens map[string][]*regexp.Regexp
 	keys   []string
 }
 
+/*
+NewHolder : a factory method to create Holder.
+*/
 func NewHolder() *Holder {
-	rawTokens := os.Getenv(AUTH_TOKENS)
+	rawTokens := os.Getenv(AuthTokens)
 	if len(rawTokens) == 0 {
 		rawTokens = "{}"
 	}
@@ -45,7 +54,7 @@ func NewHolder() *Holder {
 				}
 			}
 		}
-		for k, _ := range tokens {
+		for k := range tokens {
 			keys = append(keys, k)
 		}
 	} else {
@@ -58,15 +67,24 @@ func NewHolder() *Holder {
 	}
 }
 
+/*
+GetTokens : get all bearer tokens held in this Holder.
+*/
 func (holder *Holder) GetTokens() []string {
 	return holder.keys
 }
 
+/*
+HasToken : check whether the bearer token is held in this Holder.
+*/
 func (holder *Holder) HasToken(token string) bool {
 	_, ok := holder.tokens[token]
 	return ok
 }
 
+/*
+GetAllowedPaths : get all allowed paths associated with the bearer token.
+*/
 func (holder *Holder) GetAllowedPaths(token string) []*regexp.Regexp {
 	return holder.tokens[token]
 }

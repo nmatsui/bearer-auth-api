@@ -34,7 +34,7 @@ func setUp(t *testing.T) (func(string, string, string) (*http.Response, error), 
 		return c.Do(r)
 	}
 	tearDown := func() {
-		os.Unsetenv(token.AUTH_TOKENS)
+		os.Unsetenv(token.AuthTokens)
 		ts.Close()
 	}
 	return doRequest, tearDown
@@ -52,7 +52,7 @@ func TestNewHandlerWithValidTokens(t *testing.T) {
 		"TOKEN3": []
 	}
 	`
-	os.Setenv(token.AUTH_TOKENS, json)
+	os.Setenv(token.AuthTokens, json)
 
 	t.Run("without Header", func(t *testing.T) {
 		cases := []struct {

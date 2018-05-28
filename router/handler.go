@@ -9,21 +9,27 @@ import (
 	"github.com/nmatsui/bearer-auth-api/token"
 )
 
-const AUTH_HEADER = "authorization"
-const BEARER_RE = `(?i)^bearer (.+)$`
+const authHeader = "authorization"
+const bearerRe = `(?i)^bearer (.+)$`
 
+/*
+Handler : a struct to handle HTTP Request and check its Header.
+*/
 type Handler struct {
 	Engine *gin.Engine
 }
 
+/*
+NewHandler : a factory method to create Handler.
+*/
 func NewHandler() *Handler {
 	engine := gin.Default()
 	holder := token.NewHolder()
 
-	tokenRe := regexp.MustCompile(BEARER_RE)
+	tokenRe := regexp.MustCompile(bearerRe)
 
 	engine.NoRoute(func(context *gin.Context) {
-		authHeader := context.Request.Header.Get(AUTH_HEADER)
+		authHeader := context.Request.Header.Get(authHeader)
 		if len(authHeader) == 0 {
 			authHeaderMissing(context)
 		} else {
@@ -44,6 +50,9 @@ func NewHandler() *Handler {
 	return router
 }
 
+/*
+Run : start listening HTTP Request using enclosed gin.Engine.
+*/
 func (router *Handler) Run(port string) {
 	router.Engine.Run(port)
 }
@@ -62,7 +71,7 @@ func authHeaderMissing(context *gin.Context) {
 	context.Writer.Header().Set("WWW-Authenticate", "Bearer realm=\"token_required\"")
 	context.JSON(http.StatusUnauthorized, gin.H{
 		"authorized": false,
-		"error":      "missing Header: " + AUTH_HEADER,
+		"error":      "missing Header: " + authHeader,
 	})
 }
 

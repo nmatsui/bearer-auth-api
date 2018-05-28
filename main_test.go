@@ -12,13 +12,13 @@ func TestGetListenPortNoEnv(t *testing.T) {
 	assert := assert.New(t)
 
 	port := getListenPort()
-	assert.Equal(port, ":"+DEFAULT_PORT)
+	assert.Equal(port, ":"+defaultPort)
 }
 
 func TestGetListenPortWithEnv(t *testing.T) {
 	assert := assert.New(t)
 
-	defaultPort := ":" + DEFAULT_PORT
+	defaultPort := ":" + defaultPort
 	cases := []struct {
 		port   string
 		expect string
@@ -33,11 +33,11 @@ func TestGetListenPortWithEnv(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(fmt.Sprintf("port=%v", c.port), func(t *testing.T) {
-			os.Setenv(LISTEN_PORT, c.port)
+			os.Setenv(listenPort, c.port)
 
 			port := getListenPort()
 			assert.Equal(port, c.expect, c.desc)
-			os.Unsetenv(LISTEN_PORT)
+			os.Unsetenv(listenPort)
 		})
 	}
 }

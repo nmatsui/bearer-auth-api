@@ -11,7 +11,7 @@ import (
 func setUp(t *testing.T) func() {
 	t.Helper()
 	return func() {
-		os.Unsetenv(AUTH_TOKENS)
+		os.Unsetenv(AuthTokens)
 	}
 }
 
@@ -47,7 +47,7 @@ func TestNewHolderEmptyENV(t *testing.T) {
 	tearDown := setUp(t)
 	defer tearDown()
 
-	os.Setenv(AUTH_TOKENS, "")
+	os.Setenv(AuthTokens, "")
 
 	holder := NewHolder()
 
@@ -83,7 +83,7 @@ func TestNewHolderWithValidENV(t *testing.T) {
 		"TOKEN3": []
 	}
 	`
-	os.Setenv(AUTH_TOKENS, json)
+	os.Setenv(AuthTokens, json)
 
 	holder := NewHolder()
 
@@ -143,7 +143,7 @@ func TestNewHolderWithInValidPath(t *testing.T) {
 		"TOKEN2": "dummy"
 	}
 	`
-	os.Setenv(AUTH_TOKENS, json)
+	os.Setenv(AuthTokens, json)
 
 	holder := NewHolder()
 
@@ -202,7 +202,7 @@ func TestNewHolderWithListJson(t *testing.T) {
 		}
 	]
 	`
-	os.Setenv(AUTH_TOKENS, json)
+	os.Setenv(AuthTokens, json)
 
 	holder := NewHolder()
 
@@ -250,7 +250,7 @@ func TestNewHolderWithInvalidJson(t *testing.T) {
 		"TOKEN2": "dummy",
 	}
 	`
-	os.Setenv(AUTH_TOKENS, json)
+	os.Setenv(AuthTokens, json)
 
 	holder := NewHolder()
 
